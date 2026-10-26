@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>job-search — Free Daily Digest</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+<header>
+  <h1>job-search</h1>
+  <p>Free job digest. No paid API, no auto-apply, no login bypass. You review, you apply on the source site.</p>
+</header>
+
+<main>
+<section class="card" id="setup">
+  <h2>1. Your profile (stays in this browser only)</h2>
+  <label>Resume file (.pdf / .txt)
+    <input type="file" id="resumeFile" accept=".pdf,.txt,.md">
+  </label>
+  <label>Or paste resume text
+    <textarea id="resumeText" rows="4" placeholder="Paste resume text here…"></textarea>
+  </label>
+  <button id="parseResume">Parse resume</button>
+  <div class="grid">
+    <label>Target titles (comma separated)
+      <input id="titles" value="DevOps Engineer, SRE, Platform Engineer">
+    </label>
+    <label>Years of experience
+      <input id="years" type="number" min="0" max="40" value="4">
+    </label>
+    <label>Preferred location
+      <input id="locationPref" value="Delhi NCR, Remote India">
+    </label>
+  </div>
+  <p id="resumeSummary" class="muted">No resume parsed yet. Skills and years below are editable — parsing is an estimate, not a verdict.</p>
+  <label>Detected skills (editable, comma separated)
+    <input id="skills" placeholder="aws, kubernetes, docker, terraform…">
+  </label>
+</section>
+
+<section class="card">
+  <h2>2. Free API keys (optional, browser-only)</h2>
+  <p class="muted">Keys are saved only in this browser's localStorage. They are never sent to this repo or committed. Leave blank to use Sample Mode.</p>
+  <div class="grid">
+    <label>JSearch (RapidAPI) key
+      <input id="jsearchKey" type="password" placeholder="Free tier: 200 requests/month">
+    </label>
+    <label>Adzuna App ID
+      <input id="adzunaId" placeholder="Free tier">
+    </label>
+    <label>Adzuna App Key
+      <input id="adzunaKey" type="password" placeholder="Free tier: 2,500/month">
+    </label>
+  </div>
+  <button id="saveKeys">Save keys locally</button>
+  <span id="keyStatus" class="muted"></span>
+</section>
+
+<section class="card">
+  <h2>3. Filters</h2>
+  <div class="grid">
+    <label>Role / keywords
+      <input id="q" value="DevOps Engineer">
+    </label>
+    <label>Location
+      <input id="location" value="Delhi">
+    </label>
+    <label>Workplace
+      <select id="workplace">
+        <option value="any">Any</option>
+        <option value="remote">Remote only</option>
+        <option value="onsite">On-site</option>
+        <option value="hybrid">Hybrid</option>
+      </select>
+    </label>
+    <label>Posted within
+      <select id="days">
+        <option value="1">1 day</option>
+        <option value="3" selected>3 days</option>
+        <option value="7">7 days</option>
+        <option value="14">14 days</option>
+        <option value="30">30 days</option>
+      </select>
+    </label>
+    <label>Status
+      <select id="statusFilter">
+        <option value="new">New only (hide Saved / Applied / Rejected)</option>
+        <option value="all">All</option>
+        <option value="saved">Saved</option>
+        <option value="applied">Applied</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </label>
+  </div>
+  <button id="search">Search live (free tiers)</button>
+  <button id="sample" class="secondary">Load sample mode</button>
+  <p id="searchStatus" class="muted"></p>
+</section>
+
+<section class="card">
+  <h2>4. Add a job manually (Naukri / Wellfound / any link)</h2>
+  <p class="muted">No free API covers Naukri/Wellfound fully, so paste a job you found there and track it here.</p>
+  <div class="grid">
+    <label>Job title <input id="manualTitle"></label>
+    <label>Company <input id="manualCompany"></label>
+    <label>Location <input id="manualLocation"></label>
+    <label>Apply URL <input id="manualUrl" placeholder="https://…"></label>
+  </div>
+  <button id="addManual">Add job</button>
+</section>
+
+<section>
+  <h2 id="resultsHeading">Results</h2>
+  <div id="results"></div>
+</section>
+</main>
+
+<footer class="muted">
+  <p>Salary shown only when the source states it. Adzuna salary can be predicted — check the source before applying. Closed roles can linger in aggregators — verify on the source site.</p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
