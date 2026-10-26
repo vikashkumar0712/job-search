@@ -200,5 +200,20 @@ $('addManual').onclick = () => {
 ['workplace','days','statusFilter'].forEach(id => $(id).onchange = render);
 $('years').onchange = render;
 
+async function loadCachedJobs() {
+  try {
+    const r = await fetch('jobs.json', { cache: 'no-store' });
+    if (!r.ok) return;
+    const d = await r.json();
+    if (d.jobs && d.jobs.length) {
+      jobs = dedupe([...d.jobs, ...jobs]);
+      jobs.forEach(j => { j.score = scoreJob(j); });
+      $('cachedStatus').textContent = 'Daily cached feed: ' + d.count + ' jobs, generated ' + new Date(d.generated_at).toLocaleString() + '. Verify on the source before applying.';
+      render();
+    }
+  } catch (e) { /* no daily feed yet — live search / sample still work */ }
+}
+
 loadState();
 render();
+loadCachedJobs();

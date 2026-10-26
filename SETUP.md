@@ -28,7 +28,18 @@ Example: 5 saved searches refreshed once a day ≈ 150 JSearch requests/month.
 - Sample mode jobs are labelled `SAMPLE DEMO — not a real listing` and must never be presented as real jobs.
 - Experience fit is a ranking from job text, not an exact filter: many postings state no year range, and those are labelled “Unclear”.
 
-## Next pieces (not in v1)
-- GitHub Actions daily refresh writing a `jobs.json` (needs API keys as GitHub Secrets, added by the repo owner — never committed).
+## Daily automation (GitHub Actions)
+`.github/workflows/daily-jobs.yml` runs every day at 08:00 IST and writes `jobs.json`.
+The live app loads that file automatically as the daily cached feed.
+
+Enable it:
+1. Repo → Settings → Secrets and variables → Actions → New repository secret.
+   Add `JSEARCH_KEY` (and optionally `ADZUNA_ID` + `ADZUNA_KEY`). Secrets are never committed.
+2. Repo → Actions → “Daily job digest” → Run workflow, to test it once manually.
+3. Without secrets the workflow still runs but writes an empty feed — live search in the browser still works with keys saved there.
+
+Quota guard: 6 JSearch queries/day ≈ 180/month, inside the 200 free tier.
+
+## Next pieces (not yet built)
 - Native alert-email import for Naukri/Wellfound.
 - Applied tracker export.
