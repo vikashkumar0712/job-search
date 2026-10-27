@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-10-27T08:17:04.670Z",
+  "count": 0,
+  "new_count": 0,
+  "quota_estimate_per_run": {
+    "jsearch_requests": 0,
+    "adzuna_requests": 0
+  },
+  "quota_note": "JSearch SECONDARY: 2/day = ~60/month (free tier 200). Adzuna MAIN: 12/day = 360/month (free tier 2,500).",
+  "jobs": []
+}
