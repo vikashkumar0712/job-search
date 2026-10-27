@@ -92,6 +92,7 @@ function render() {
       + '<p><span class="badge">' + escapeHtml(j.source) + '</span>'
       + '<span class="badge">' + escapeHtml(workplaceOf(j)) + '</span>'
       + '<span class="badge">Fit: ' + escapeHtml(experienceFit(parseInt($('years').value || 0, 10), j.description || '')) + '</span>'
+      + (j.is_new ? '<span class="badge sample">NEW</span>' : '')
       + (j.sample ? '<span class="badge sample">SAMPLE DEMO — not a real listing</span>' : '') + '</p>'
       + '<p class="muted">' + escapeHtml((j.description || '').slice(0, 280)) + '</p>'
       + '<p class="muted">Matched skills: ' + escapeHtml((j.matchedSkills || []).join(', ') || 'none') + ' · Status: ' + st + '</p>';
@@ -208,7 +209,9 @@ async function loadCachedJobs() {
     if (d.jobs && d.jobs.length) {
       jobs = dedupe([...d.jobs, ...jobs]);
       jobs.forEach(j => { j.score = scoreJob(j); });
-      $('cachedStatus').textContent = 'Daily cached feed: ' + d.count + ' jobs, generated ' + new Date(d.generated_at).toLocaleString() + '. Verify on the source before applying.';
+      $('cachedStatus').textContent = 'Daily cached feed: ' + d.count + ' jobs (' + (d.new_count ?? 0) + ' new), generated ' + new Date(d.generated_at).toLocaleString()
+        + (d.quota_estimate_per_run ? ' · Quota used per run: JSearch ~' + d.quota_estimate_per_run.jsearch_requests + ', Adzuna ~' + d.quota_estimate_per_run.adzuna_requests + '.' : '')
+        + ' Verify on the source before applying.';
       render();
     }
   } catch (e) { /* no daily feed yet — live search / sample still work */ }

@@ -13,8 +13,12 @@ Opening `index.html` directly also works, but a local server is more reliable fo
 2. **Adzuna** — free tier 250 calls/day, 2,500/month.
    Paste App ID + App Key in the app, same browser-only storage.
 
-Stay inside the free tiers by using saved searches with a daily refresh, not a live search on every keystroke.
-Example: 5 saved searches refreshed once a day ≈ 150 JSearch requests/month.
+## Efficiency (how free stays best, not just cheap)
+- Broad India queries, not one query per city. City/remote filtering is free in the app.
+- Freshness first: daily run fetches only last-3-days jobs, so quota is not spent re-fetching week-old jobs.
+- Seen-dedupe: `scripts/fetch-jobs.mjs` keeps the previous 7 days of jobs in `jobs.json` but marks only first-seen jobs `is_new`. The app shows a NEW badge for those.
+- Quota split: JSearch for LinkedIn/Indeed depth, Adzuna for breadth (its free tier is far larger).
+- Live browser search is 1 request per click — use the cached daily feed first, live search only for a new role/location.
 
 ## What is free, and what is not
 - Free: this app, JSearch/Adzuna free tiers, GitHub Pages hosting, local resume parsing.
@@ -38,7 +42,7 @@ Enable it:
 2. Repo → Actions → “Daily job digest” → Run workflow, to test it once manually.
 3. Without secrets the workflow still runs but writes an empty feed — live search in the browser still works with keys saved there.
 
-Quota guard: 6 JSearch queries/day ≈ 180/month, inside the 200 free tier.
+Quota guard per daily run (2026-10-27 decision: JSearch is secondary, not main): JSearch 2 queries x 1 page = 2 requests/day ≈ 60/month (inside the 200 free tier). Adzuna MAIN: 12 queries/day = 360/month (inside the 2,500 free tier). Raw volume per run: up to 20 JSearch + 240 Adzuna jobs before dedupe; deduped, recent, and new-only counts will be lower. Real India volume comes from native Naukri/LinkedIn alerts + company ATS feeds (free, unlimited), imported manually in section 4.
 
 ## Next pieces (not yet built)
 - Native alert-email import for Naukri/Wellfound.
